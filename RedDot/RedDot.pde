@@ -1,7 +1,8 @@
-import hypermedia.net.UDP;
 import java.util.List;
+import processing.net.*;
 
-UDP udp;
+Client client;
+
 boolean recording = false;
 List<PVector> points = new ArrayList<PVector>();
 
@@ -13,8 +14,7 @@ void setup() {
   background(0);
   stroke(255,0,0);
   
-  udp = new UDP(this, 5002, "localhost");
-  udp.listen(true);
+  client = new Client(this, "10.1.10.103", 5002);
   
   PVector center = new PVector(width/2,height/2);
   float r = height/2.2;
@@ -27,6 +27,14 @@ void setup() {
 }
 
 void draw() {
+  if (client.available() > 0) {
+    String command = client.readString();
+    if(command.contains("on")) {
+      recording = true;
+    } else if (command.contains("off")) {
+      recording = false;
+    } 
+  }
   fill(0,0,0,20);
   rect(-1,-1,width+1,height+1);
   if (recording) {
@@ -38,14 +46,3 @@ void draw() {
     }
   }
 }
-
-void receive(byte[] data) {
-  String command = new String(data);
-  if(command.contains("on")) {
-    recording = true;
-  } else if (command.contains("off")) {
-    recording = false;
-  }
-}
-
-
