@@ -6,10 +6,10 @@ boolean recording = false;
 List<PVector> points = new ArrayList<PVector>();
 
 private final int NUM_POINTS = 1000;
-private final int NUM_LINES = 300;
+private final int NUM_LINES = 100;
 
 void setup() {
-  size(500,500);
+  size(800, 600);
   background(0);
   stroke(255,0,0);
   
@@ -17,16 +17,18 @@ void setup() {
   udp.listen(true);
   
   PVector center = new PVector(width/2,height/2);
-  float r = width/1.1;
+  float r = height/2.2;
   for (int i = 0; i < NUM_POINTS; i++) {
     float x = center.x + r * cos(TWO_PI * i / NUM_POINTS);
     float y = center.y + r * sin(TWO_PI * i / NUM_POINTS);
-    PVector p = new PVector();
+    PVector p = new PVector(x, y);
+    points.add(p);
   }
 }
 
 void draw() {
-  background(0);
+  fill(0,0,0,20);
+  rect(-1,-1,width+1,height+1);
   if (recording) {
     //ellipse(width/2,height/2,width/1.1,width/1.1);
     for(int i = 0; i < NUM_LINES; i++) {
